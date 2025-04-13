@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.TokenMapper;
 import ru.bakht.internetshop.auth.mapper.UserMapper;
 import ru.bakht.internetshop.auth.model.User;
@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
             twoFactorService.generateAndSendCode(user.getEmail());
 
             // Возвращаем ответ с просьбой ввести 2FA код
-            throw  new KvadroksException("Введите код 2FA, отправленный на вашу почту", HttpStatus.OK);
+            throw  new AppException("Введите код 2FA, отправленный на вашу почту", HttpStatus.OK);
         }
 
         // Если 2FA не требуется, генерируем токены
@@ -138,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void validateUserForLogin(User user) {
         if (user.isAccountLocked() || !user.isEnabled()) {
-            throw new KvadroksException(
+            throw new AppException(
                     "Account with email " + user.getEmail() + " is blocked or not verified",
                     HttpStatus.FORBIDDEN
             );
@@ -147,7 +147,7 @@ public class AuthServiceImpl implements AuthService {
 
     private void checkAccountLocked(String email) {
         if (loginAttemptService.isAccountLocked(email)) {
-            throw new KvadroksException(
+            throw new AppException(
                     "Account locked until: " + loginAttemptService.getAccountUnlockTime(email),
                     HttpStatus.TOO_MANY_REQUESTS
             );
@@ -160,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
         if (loginAttemptService.isCaptchaRequired(loginDto.getEmail()) &&
                 !captchaValidatorService.validate(loginDto.getCaptchaToken(), clientIp)) {
             loginAttemptService.loginFailed(loginDto.getEmail());
-            throw new KvadroksException("CAPTCHA verification failed", HttpStatus.UNAUTHORIZED);
+            throw new AppException("CAPTCHA verification failed", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -168,39 +168,39 @@ public class AuthServiceImpl implements AuthService {
 
         if (refreshToken == null || refreshToken.isBlank()) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Refresh token not found in cookies", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Refresh token not found in cookies", HttpStatus.UNAUTHORIZED);
         }
 
         if (tokenBlacklistService.isBlacklisted(refreshToken)) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Token blacklisted", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Token blacklisted", HttpStatus.UNAUTHORIZED);
         }
 
         if (!jwtService.isTokenSignatureValid(refreshToken)) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Invalid token signature", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Invalid token signature", HttpStatus.UNAUTHORIZED);
         }
 
         if (!jwtService.isRefreshToken(refreshToken)) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Invalid token type", HttpStatus.FORBIDDEN);
+            throw new AppException("Invalid token type", HttpStatus.FORBIDDEN);
         }
 
         if (jwtService.isTokenExpired(refreshToken)) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Token expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException("Token expired", HttpStatus.UNAUTHORIZED);
         }
 
         String userId = jwtService.extractUserId(refreshToken);
         User user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> {
                     cookieUtil.deleteRefreshTokenFromCookies(response);
-                    return new KvadroksException("User not found", HttpStatus.NOT_FOUND);
+                    return new AppException("User not found", HttpStatus.NOT_FOUND);
                 });
 
         if (user.isAccountLocked() || !user.isEnabled()) {
             cookieUtil.deleteRefreshTokenFromCookies(response);
-            throw new KvadroksException("Account is blocked or not verified", HttpStatus.FORBIDDEN);
+            throw new AppException("Account is blocked or not verified", HttpStatus.FORBIDDEN);
         }
 
         return user;

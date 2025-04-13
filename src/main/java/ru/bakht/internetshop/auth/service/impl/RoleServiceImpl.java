@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.RoleMapper;
 import ru.bakht.internetshop.auth.model.Role;
 import ru.bakht.internetshop.auth.model.User;
@@ -38,7 +38,7 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public Role getByName(RoleName roleName) {
         return roleRepo.findByName(roleName)
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                         "Role not found with name: " + roleName.name(), HttpStatus.NOT_FOUND)
                 );
     }
@@ -46,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void addRole(UUID roleId, UUID userId) {
         Role role = roleRepo.findById(roleId)
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                         "Role not found with ID: " + roleId,
                         HttpStatus.NOT_FOUND
                 ));
@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
         User user = userService.getById(userId);
 
         if (user.getRoles().contains(role)) {
-            throw new KvadroksException(
+            throw new AppException(
                     "User already has this role",
                     HttpStatus.CONFLICT
             );
@@ -66,7 +66,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void removeRole(UUID roleId, UUID userId) {
         Role role = roleRepo.findById(roleId)
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                         "Role not found with ID: " + roleId,
                         HttpStatus.NOT_FOUND
                 ));
@@ -74,7 +74,7 @@ public class RoleServiceImpl implements RoleService {
         User user = userService.getById(userId);
 
         if (!user.getRoles().remove(role)) {
-            throw new KvadroksException(
+            throw new AppException(
                     "User does not have this role",
                     HttpStatus.BAD_REQUEST
             );

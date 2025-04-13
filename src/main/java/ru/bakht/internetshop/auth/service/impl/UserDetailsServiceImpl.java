@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.repository.UserRepo;
 
 
@@ -20,6 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new KvadroksException("User not found with email: " + email, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException("User not found with email: " + email, HttpStatus.NOT_FOUND));
     }
 }

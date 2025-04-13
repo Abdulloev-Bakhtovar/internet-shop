@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.UserInfoMapper;
 import ru.bakht.internetshop.auth.mapper.UserMapper;
 import ru.bakht.internetshop.auth.model.Role;
@@ -42,7 +42,7 @@ public class UserMapperImpl implements UserMapper {
     @Override
     public User toEntity(EmailAndPassDto dto, Role role) {
         if (dto == null) {
-            throw new KvadroksException("Dto cannot be null", HttpStatus.BAD_REQUEST);
+            throw new AppException("Dto cannot be null", HttpStatus.BAD_REQUEST);
         }
 
         return User.builder()

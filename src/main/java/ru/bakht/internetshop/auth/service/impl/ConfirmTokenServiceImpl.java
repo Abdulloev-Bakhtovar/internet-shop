@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.Token;
 import ru.bakht.internetshop.auth.model.User;
 import ru.bakht.internetshop.auth.model.dto.ResetPasswordDto;
@@ -33,7 +33,7 @@ public class ConfirmTokenServiceImpl implements ConfirmTokenService {
     private final AuthService authService;
 
     @Override
-    @Transactional(noRollbackFor = KvadroksException.class)
+    @Transactional(noRollbackFor = AppException.class)
     public void confirmTokenFromEmail(String token,
                                       TokenTypeName tokenTypeName,
                                       HttpServletRequest request,
@@ -65,7 +65,7 @@ public class ConfirmTokenServiceImpl implements ConfirmTokenService {
         var tokenType = tokenTypeService.getByName(tokenTypeName);
 
         return tokenRepo.findByTokenAndTokenType(token, tokenType)
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                         "Token not found",
                         HttpStatus.NOT_FOUND)
                 );
@@ -79,7 +79,7 @@ public class ConfirmTokenServiceImpl implements ConfirmTokenService {
                     determineEmailTemplateName(token.getTokenType().getName()),
                     token.getUser()
             );
-            throw new KvadroksException("Token expired. New token was sent to the email: " + token.getUser().getEmail(),
+            throw new AppException("Token expired. New token was sent to the email: " + token.getUser().getEmail(),
                     HttpStatus.BAD_REQUEST
             );
         }
@@ -90,7 +90,7 @@ public class ConfirmTokenServiceImpl implements ConfirmTokenService {
             case ACTIVATION -> activationAccount(savedToken.getUser());
             case EMAIL_CHANGE -> emailChange(savedToken.getUser(), request, response);
             case PASSWORD_CHANGE -> passwordChange(savedToken.getUser(), request, response);
-            default -> throw new KvadroksException(
+            default -> throw new AppException(
                     "Unknown token type: " + savedToken.getTokenType().getName(),
                     HttpStatus.NOT_FOUND
             );

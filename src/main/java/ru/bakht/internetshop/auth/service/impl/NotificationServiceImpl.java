@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.User;
 import ru.bakht.internetshop.auth.model.enums.EmailTemplateName;
 import ru.bakht.internetshop.auth.model.enums.TokenTypeName;
@@ -42,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
                     subject
             );
         } catch (MessagingException e) {
-            throw new KvadroksException(
+            throw new AppException(
                     "Failed to send email to address: " + messageRecipient, HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
@@ -55,7 +55,7 @@ public class NotificationServiceImpl implements NotificationService {
             case CHANGE_EMAIL -> "Подтверждение изменения email";
             case RESET_PASSWORD -> "Подтверждение сброса пароля";
             case CHANGE_PASSWORD -> "Подтверждение изменения пароля";
-            default -> throw new KvadroksException("Unexpected value: " + templateType, HttpStatus.INTERNAL_SERVER_ERROR);
+            default -> throw new AppException("Unexpected value: " + templateType, HttpStatus.INTERNAL_SERVER_ERROR);
         };
     }
 
@@ -66,7 +66,7 @@ public class NotificationServiceImpl implements NotificationService {
             case CHANGE_EMAIL -> TokenTypeName.EMAIL_CHANGE;
             case RESET_PASSWORD -> TokenTypeName.PASSWORD_RESET;
             case CHANGE_PASSWORD -> TokenTypeName.PASSWORD_CHANGE;
-            default -> throw new KvadroksException("Unexpected value: " + templateName, HttpStatus.INTERNAL_SERVER_ERROR);
+            default -> throw new AppException("Unexpected value: " + templateName, HttpStatus.INTERNAL_SERVER_ERROR);
         };
     }
 }

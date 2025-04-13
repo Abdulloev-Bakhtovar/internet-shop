@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.TokenClaims;
 import ru.bakht.internetshop.auth.model.User;
 import ru.bakht.internetshop.auth.service.JwtService;
@@ -69,7 +69,7 @@ public class JwtServiceImpl implements JwtService {
         List<?> roles = extractClaim(jwt, claims -> claims.get("roles", List.class));
 
         if (roles == null || roles.isEmpty()) {
-            throw new KvadroksException("JWT token is malformed", HttpStatus.BAD_REQUEST);
+            throw new AppException("JWT token is malformed", HttpStatus.BAD_REQUEST);
         }
 
         return roles.stream()
@@ -117,10 +117,10 @@ public class JwtServiceImpl implements JwtService {
                     .signWith(privateKey)
                     .compact();
         } catch (NoSuchFileException ex) {
-            throw new KvadroksException("Private key file not found. Please check the file path.",
+            throw new AppException("Private key file not found. Please check the file path.",
                     HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            throw new KvadroksException("Error while signing JWT",
+            throw new AppException("Error while signing JWT",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -129,7 +129,7 @@ public class JwtServiceImpl implements JwtService {
     public boolean isTokenExpired(String token) {
         boolean isExpired = extractExpiration(token).isBefore(Instant.now());
         if (isExpired) {
-            throw new KvadroksException("JWT token has expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException("JWT token has expired", HttpStatus.UNAUTHORIZED);
         }
         return isExpired;
     }
@@ -169,9 +169,9 @@ public class JwtServiceImpl implements JwtService {
                     .parseSignedClaims(token)
                     .getPayload();
         } catch (ExpiredJwtException e) {
-            throw new KvadroksException("JWT token has expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException("JWT token has expired", HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            throw new KvadroksException("JWT token is malformed", HttpStatus.UNAUTHORIZED);
+            throw new AppException("JWT token is malformed", HttpStatus.UNAUTHORIZED);
         }
     }
 

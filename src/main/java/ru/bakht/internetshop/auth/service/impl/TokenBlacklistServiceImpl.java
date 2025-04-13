@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.service.JwtService;
 import ru.bakht.internetshop.auth.service.TokenBlacklistService;
 
@@ -48,7 +48,7 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
                 );
             }
         } catch (Exception e) {
-            throw new KvadroksException("Failed to blacklist token", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to blacklist token", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.enums.EmailTemplateName;
 import ru.bakht.internetshop.auth.service.EmailService;
 
@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
                     subject);
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            throw new KvadroksException("Failed to send email to " + to, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Failed to send email to " + to, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -87,7 +87,7 @@ public class EmailServiceImpl implements EmailService {
             case CHANGE_EMAIL -> String.format("%s/auth/confirm/change/email?token=%s", confirmUrl, token);
             case CHANGE_PASSWORD -> String.format("%s/auth/confirm/change/password?token=%s", confirmUrl, token);
             case RESET_PASSWORD -> String.format("%s/auth/confirm/reset/password?token=%s", confirmUrl, token);
-            default -> throw new KvadroksException("Unexpected value: " + template, HttpStatus.INTERNAL_SERVER_ERROR);
+            default -> throw new AppException("Unexpected value: " + template, HttpStatus.INTERNAL_SERVER_ERROR);
         };
     }
 

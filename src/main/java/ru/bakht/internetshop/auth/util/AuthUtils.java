@@ -9,7 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.User;
 import ru.bakht.internetshop.auth.service.LoginAttemptService;
 
@@ -34,7 +34,7 @@ public class AuthUtils {
             return user;
         }
 
-        throw new KvadroksException("User is not authenticated", HttpStatus.UNAUTHORIZED);
+        throw new AppException("User is not authenticated", HttpStatus.UNAUTHORIZED);
     }
 
     public static void validateCredentials(String email, String password) {
@@ -42,7 +42,7 @@ public class AuthUtils {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (BadCredentialsException e) {
             loginAttemptService.loginFailed(email);
-            throw new KvadroksException("Invalid credentials for email: " + email, HttpStatus.UNAUTHORIZED);
+            throw new AppException("Invalid credentials for email: " + email, HttpStatus.UNAUTHORIZED);
         }
     }
 

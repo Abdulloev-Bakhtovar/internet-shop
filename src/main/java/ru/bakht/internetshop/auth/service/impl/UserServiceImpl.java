@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.UserInfoMapper;
 import ru.bakht.internetshop.auth.mapper.UserMapper;
 import ru.bakht.internetshop.auth.model.User;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new KvadroksException("User not found with email: " + email,
+                .orElseThrow(() -> new AppException("User not found with email: " + email,
                         HttpStatus.NOT_FOUND)
                 );
     }
@@ -56,13 +56,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new KvadroksException("User not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException("User not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public void validateUserDoesNotExist(String email) {
         if (userRepo.existsByEmail(email)) {
-            throw new KvadroksException(
+            throw new AppException(
                     "User already exists with email: " + email,
                     HttpStatus.CONFLICT
             );
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         var authenticatedUser = authUtils.getAuthenticatedUser();
 
         return userRepository.findById(authenticatedUser.getId())
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                         "User not found with user ID: " + authenticatedUser.getId(),
                         HttpStatus.NOT_FOUND
                 ));

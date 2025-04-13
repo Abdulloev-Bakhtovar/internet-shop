@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.TokenType;
 import ru.bakht.internetshop.auth.model.enums.TokenTypeName;
 import ru.bakht.internetshop.auth.repository.TokenTypeRepo;
@@ -23,7 +23,7 @@ public class TokenTypeServiceImpl implements TokenTypeService {
     public TokenType getByName(TokenTypeName tokenTypeName) {
 
         return tokenTypeRepo.findByName(tokenTypeName)
-                .orElseThrow(() -> new KvadroksException(
+                .orElseThrow(() -> new AppException(
                             "Token type not found with name: " + tokenTypeName, HttpStatus.NOT_FOUND
                 ));
     }

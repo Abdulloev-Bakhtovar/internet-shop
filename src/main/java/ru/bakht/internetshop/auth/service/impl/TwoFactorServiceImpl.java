@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.TokenMapper;
 import ru.bakht.internetshop.auth.model.dto.TokenDto;
 import ru.bakht.internetshop.auth.model.enums.EmailTemplateName;
@@ -57,7 +57,7 @@ public class TwoFactorServiceImpl implements TwoFactorService {
                     "Код подтверждения входа (2FA)"
             );
         } catch (MessagingException e) {
-            throw new KvadroksException("Error send 2fa code", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new AppException("Error send 2fa code", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -68,7 +68,7 @@ public class TwoFactorServiceImpl implements TwoFactorService {
         String storedCode = redisTemplate.opsForValue().get(redisKey);
 
         if (storedCode == null) {
-            throw new KvadroksException("Code not found", HttpStatus.NOT_FOUND);
+            throw new AppException("Code not found", HttpStatus.NOT_FOUND);
         }
 
         boolean isValid = code.equals(storedCode);
@@ -84,7 +84,7 @@ public class TwoFactorServiceImpl implements TwoFactorService {
 
             return tokenMapper.toDto(accessToken);
         }
-        throw new KvadroksException("Code verification failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new AppException("Code verification failed", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override

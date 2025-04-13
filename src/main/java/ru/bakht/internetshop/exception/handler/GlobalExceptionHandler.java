@@ -1,11 +1,11 @@
-package ru.bakht.internetshop.auth.exception.handler;
+package ru.bakht.internetshop.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +13,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(KvadroksException.class)
-    public ResponseEntity<Map<String, String>> handleKvadroksException(KvadroksException ex) {
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<Map<String, String>> handleKvadroksException(AppException ex) {
         Map<String, String> error = new HashMap<>();
         error.put("message", ex.getMessage());
 

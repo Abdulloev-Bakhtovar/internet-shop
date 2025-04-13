@@ -1,7 +1,7 @@
 package ru.bakht.internetshop.auth.util;
 
 import org.springframework.http.HttpStatus;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -16,9 +16,9 @@ public class TokenGeneratorUtil {
      * @return сгенерированный числовой код
      * @throws IllegalArgumentException если длина меньше 1
      */
-    public static String generateNumericCode(int length) throws KvadroksException {
+    public static String generateNumericCode(int length) throws AppException {
         if (length < 1) {
-            throw new KvadroksException("Длина кода должна быть положительным числом", HttpStatus.BAD_REQUEST);
+            throw new AppException("Длина кода должна быть положительным числом", HttpStatus.BAD_REQUEST);
         }
 
         StringBuilder code = new StringBuilder(length);

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bakht.internetshop.auth.exception.KvadroksException;
+import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.mapper.LoginInfoChangeMapper;
 import ru.bakht.internetshop.auth.model.LoginInfoChange;
 import ru.bakht.internetshop.auth.model.User;
@@ -56,13 +56,13 @@ public class LoginInfoChangeServiceImpl implements LoginInfoChangeService {
     @Override
     public LoginInfoChange getByUserAndChangeType(User user, ChangeType changeType) {
         return loginInfoChangeRepo.findByUserIdAndChangeType(user.getId(), changeType)
-                .orElseThrow(() -> new KvadroksException(changeType + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException(changeType + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public void validateUserDoesNotExist(String email) {
         if(loginInfoChangeRepo.existsByValue(email)) {
-            throw new KvadroksException(
+            throw new AppException(
                     "User already exists with email: " + email,
                     HttpStatus.CONFLICT
             );
