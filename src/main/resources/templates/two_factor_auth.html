@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Двухфакторная аутентификация</title>
+</head>
+<body>
+<h1>Двухфакторная аутентификация</h1>
+<p>Вы пытаетесь войти в свою учетную запись. Для подтверждения входа введите код в соответствующее поле:</p>
+<h2 style="color: #2c3e50;" th:text="${code}">123456</h2>
+
+<p>Либо перейдите по ссылке:</p>
+<p><a th:href="${confirm_url}" target="_blank" th:text="${confirm_url}"></a></p>
+
+<p>Код действителен в течение 5 минут.</p>
+</body>
+</html>

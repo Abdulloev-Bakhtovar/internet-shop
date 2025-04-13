@@ -1,3 +1,95 @@
+server:
+  port: ${SERVER_PORT}
+  ssl:
+    key-store: classpath:static/security/keystore.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-password: ${SSL_KEY_PASSWORD}
+    key-alias: ${SSL_KEY_ALIAS}
+    enabled: true
+  servlet:
+    context-path: /api
+
 spring:
   application:
     name: internet-shop
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog_master.yml
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD}
+
+application:
+  security:
+    jwt:
+      confirm-token:
+        expiration: 10 #minute
+        length: 32
+      access-token:
+        expiration: 30 #minute
+      refresh-token:
+        expiration: 14400 #minute -> 10 day
+      keys:
+        public: ${JWT_PUBLIC_KEY_PATH}
+        private: ${JWT_PRIVATE_KEY_PATH}
+
+    login:
+      max-attempts: 3
+      lock-duration-minutes: 60 #minute
+      captcha-threshold: 2
+
+    cors-allowed-origins:
+      - "http://localhost:3000"
+      - "https://localhost:3000"
+      - "http://localhost:9090"
+      - "https://localhost:9090"
+    public-endpoints:
+      - "/auth/register"
+      - "/auth/login"
+      - "/auth/logout"
+      - "/auth/refresh"
+      - "/auth/confirm/**"
+      - "/auth/reset/password"
+      - "/v2/api-docs"
+      - "/v3/api-docs/**"
+      - "/swagger-resources/**"
+      - "/configuration/**"
+      - "/swagger-ui/**"
+      - "/webjars/**"
+    excluded-paths:
+      - "/api/auth/register"
+      - "/api/auth/login"
+      - "/api/auth/confirm/**"
+      - "/api/auth/refresh"
+      - "/api/auth/logout"
+
+  email:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    frontend:
+      confirm-url: ${FRONTEND_CONFIRM_URL}
+
+google:
+  recaptcha:
+    secret-key: ${GOOGLE_RECAPTCHA_SECRET_KEY}
+    threshold: 0.5
+    verify-url: "https://www.google.com/recaptcha/api/siteverify"
+    test-mode: true

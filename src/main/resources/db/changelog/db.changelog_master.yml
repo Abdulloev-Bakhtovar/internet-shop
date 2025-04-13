@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - preConditions:
+      - onFail: WARN
+      - dbms:
+          type: postgresql
+  - include:
+      file: db/changelog/master_changesets.xml
