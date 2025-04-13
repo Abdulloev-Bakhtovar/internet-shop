@@ -12,7 +12,6 @@ import ru.bakht.internetshop.auth.service.UserService;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('USER')")
 public class UserController {
 
     private final UserService userService;
@@ -44,12 +43,14 @@ public class UserController {
 
     @GetMapping("/user-info")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('USER')")
     public UserInfoDto getUserInfo() {
         return userService.getUserInfo();
     }
 
     @PatchMapping("/user-info")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('USER')")
     public void updateUserInfo(@RequestBody UserInfoDto userInfo) {
         userService.updateUserInfo(userInfo);
     }
