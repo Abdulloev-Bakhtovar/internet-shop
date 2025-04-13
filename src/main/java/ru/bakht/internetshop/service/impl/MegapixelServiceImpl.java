@@ -1,7 +1,6 @@
 package ru.bakht.internetshop.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +14,6 @@ import ru.bakht.internetshop.service.BaseProductFeatureService;
 import java.util.List;
 import java.util.UUID;
 
-@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
