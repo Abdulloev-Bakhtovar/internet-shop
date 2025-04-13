@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS login_info_changes (
     user_id         UUID            NOT NULL,
 
     CONSTRAINT fk_users_in_login_info_changes   FOREIGN KEY (user_id)   REFERENCES users(id)    ON DELETE CASCADE
-)
+);
 
 CREATE TABLE IF NOT EXISTS types (
     id          UUID   PRIMARY KEY,
