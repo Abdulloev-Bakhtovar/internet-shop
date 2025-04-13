@@ -2,6 +2,7 @@ package ru.bakht.internetshop.exception.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +20,14 @@ public class GlobalExceptionHandler {
         error.put("message", ex.getMessage());
 
         return ResponseEntity.status(ex.getStatus()).body(error);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Map<String, String> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("message", "Access denied: you do not have permission to perform this action.");
+        return error;
     }
 
     @ExceptionHandler(Exception.class)
