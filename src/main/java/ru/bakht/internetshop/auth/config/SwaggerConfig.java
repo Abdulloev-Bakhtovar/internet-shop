@@ -13,9 +13,9 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("Kvadroks API")
+                .info(new Info().title("Internet-shop API")
                         .version("1.0.0")
-                        .description("Документация по Kvadroks API"))
+                        .description("Документация по Internet-shop API"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new io.swagger.v3.oas.models.Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
