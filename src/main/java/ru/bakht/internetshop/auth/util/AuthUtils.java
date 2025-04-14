@@ -2,7 +2,6 @@ package ru.bakht.internetshop.auth.util;
 
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,14 +12,12 @@ import ru.bakht.internetshop.exception.AppException;
 import ru.bakht.internetshop.auth.model.User;
 import ru.bakht.internetshop.auth.service.LoginAttemptService;
 
-
 @Component
 public class AuthUtils {
 
     private static AuthenticationManager authenticationManager;
     private static LoginAttemptService loginAttemptService;
 
-    @Autowired
     public AuthUtils(AuthenticationManager authenticationManager, LoginAttemptService loginAttemptService) {
         AuthUtils.authenticationManager = authenticationManager;
         AuthUtils.loginAttemptService = loginAttemptService;
