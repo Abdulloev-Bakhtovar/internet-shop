@@ -86,6 +86,9 @@ application:
     password: ${EMAIL_PASSWORD}
     frontend:
       confirm-url: ${FRONTEND_CONFIRM_URL}
+    order:
+      notification:
+        username: ${ORDER_NOTIFICATION_USERNAME}
 
   image:
     path: ${IMAGE_PATH}

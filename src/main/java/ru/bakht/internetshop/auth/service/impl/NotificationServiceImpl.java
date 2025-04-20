@@ -37,7 +37,7 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             emailService.sendEmail(
                     messageRecipient,
-                    EmailTemplateName.ORDER_NOTIFICATION,
+                    templateType,
                     confirmToken,
                     subject,
                     null);

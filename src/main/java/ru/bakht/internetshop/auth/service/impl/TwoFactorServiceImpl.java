@@ -54,8 +54,8 @@ public class TwoFactorServiceImpl implements TwoFactorService {
                     email,
                     EmailTemplateName.TWO_FACTOR,
                     code,
-                    "Код подтверждения входа (2FA)"
-            );
+                    "Код подтверждения входа (2FA)",
+                    null);
         } catch (MessagingException e) {
             throw new AppException("Error send 2fa code", HttpStatus.INTERNAL_SERVER_ERROR);
         }

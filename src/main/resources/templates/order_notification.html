@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новый заказ</title>
+</head>
+<body>
+<h2>Новый заказ был создан:</h2>
+<p><strong>ID заказа:</strong> [[${order.id}]]</p>
+<p><strong>Дата заказа:</strong> [[${orderDate}]]</p>
+<p><strong>Описание:</strong> [[${order.description}]]</p>
+
+<h3>Информация о клиенте:</h3>
+<p><strong>Имя:</strong> [[${order.userInfo.name}]]</p>
+<p><strong>Email:</strong> [[${order.userInfo.email}]]</p>
+<p><strong>Телефон:</strong> [[${order.userInfo.phone}]]</p>
+<p><strong>Адрес:</strong> [[${order.userInfo.address}]]</p>
+
+<h3>Товары в заказе:</h3>
+<ul>
+    <th:block th:each="product : ${orderProductInfos}">
+        <li>
+            <p><strong>Продукт:</strong> [[${product.productInfo.product.uniqueName}]]</p>
+            <p><strong>Название:</strong> [[${product.productInfo.name}]]</p>
+            <p><strong>Цена:</strong> [[${product.productInfo.price}]]₽</p>
+
+            <p th:if="${product.productInfo.isInterestDiscount}">
+                <strong>Скидка:</strong> [[${product.productInfo.discount}*100]]%
+            </p>
+            <p th:if="${!product.productInfo.isInterestDiscount}">
+                <strong>Скидка:</strong> [[${product.productInfo.discount}]]₽
+            </p>
+
+            <p><strong>Миллиметры:</strong> [[${product.productInfo.millimeter.value}]]</p>
+            <p><strong>Мегапиксели:</strong> [[${product.productInfo.megapixel.value}]]</p>
+            <p><strong>Тип:</strong> [[${product.productInfo.type.value}]]</p>
+            <p><strong>Количество:</strong> [[${product.quantity}]]</p>
+        </li>
+    </th:block>
+</ul>
+
+<h3>Итоговая сумма заказа:</h3>
+<p><strong>Итого:</strong> [[${totalSum}]]₽</p>
+</body>
+</html>

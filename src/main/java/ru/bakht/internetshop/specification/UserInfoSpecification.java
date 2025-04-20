@@ -1,4 +1,4 @@
-package ru.bakht.internetshop.auth.specification;
+package ru.bakht.internetshop.specification;
 
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

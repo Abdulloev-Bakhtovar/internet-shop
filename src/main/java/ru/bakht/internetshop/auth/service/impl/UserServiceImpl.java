@@ -17,7 +17,7 @@ import ru.bakht.internetshop.auth.model.dto.UserDto;
 import ru.bakht.internetshop.auth.model.dto.UserInfoDto;
 import ru.bakht.internetshop.auth.repository.UserRepo;
 import ru.bakht.internetshop.auth.service.UserService;
-import ru.bakht.internetshop.auth.specification.UserInfoSpecification;
+import ru.bakht.internetshop.specification.UserInfoSpecification;
 import ru.bakht.internetshop.auth.util.AuthUtils;
 
 import java.util.UUID;
