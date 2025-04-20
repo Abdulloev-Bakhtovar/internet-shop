@@ -13,6 +13,7 @@ import ru.bakht.internetshop.auth.model.enums.RoleName;
 import ru.bakht.internetshop.auth.repository.RoleRepo;
 import ru.bakht.internetshop.auth.service.RoleService;
 import ru.bakht.internetshop.auth.service.UserService;
+import ru.bakht.internetshop.service.AuditService;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepo roleRepo;
     private final RoleMapper roleMapper;
     private final UserService userService;
+    private final AuditService auditService;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,6 +63,13 @@ public class RoleServiceImpl implements RoleService {
         }
 
         user.getRoles().add(role);
+
+        auditService.logAction(
+                this.getClass().getName() + "." + new Object(){}.getClass().getEnclosingMethod().getName(),
+                user.getClass().getName(),
+                user.getId(),
+                role.getName() + " role added to user with email: " + user.getEmail()
+        );
     }
 
     @Override
@@ -79,5 +88,12 @@ public class RoleServiceImpl implements RoleService {
                     HttpStatus.BAD_REQUEST
             );
         }
+
+        auditService.logAction(
+                this.getClass().getName() + "." + new Object(){}.getClass().getEnclosingMethod().getName(),
+                user.getClass().getName(),
+                user.getId(),
+                role.getName() + " role deleted from user with email: " + user.getEmail()
+        );
     }
 }

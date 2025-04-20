@@ -14,6 +14,7 @@ import ru.bakht.internetshop.model.ProductInfo;
 import ru.bakht.internetshop.model.dto.ImageDto;
 import ru.bakht.internetshop.model.dto.ProductDto;
 import ru.bakht.internetshop.repository.*;
+import ru.bakht.internetshop.service.AuditService;
 import ru.bakht.internetshop.service.ImageService;
 import ru.bakht.internetshop.service.ProductInfoImageService;
 import ru.bakht.internetshop.service.ProductService;
@@ -38,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageService imageService;
     private final ProductInfoRepo productInfoRepository;
     private final ProductInfoImageService productInfoImageService;
+    private final AuditService auditService;
 
     @Override
     public List<ProductDto> getAllVisible() {
@@ -102,6 +104,13 @@ public class ProductServiceImpl implements ProductService {
         List<ImageDto> imageDtos = imageService.addImages(images);
 
         productInfoImageService.create(imageDtos, productInfo);
+
+        auditService.logAction(
+                this.getClass().getName() + "." + new Object(){}.getClass().getEnclosingMethod().getName(),
+                product.getClass().getName(),
+                product.getId(),
+                "Created new product"
+        );
     }
 
     @Override
@@ -146,6 +155,13 @@ public class ProductServiceImpl implements ProductService {
         List<ImageDto> imageDtos = imageService.updateImages(productDto.getProductInfo().getImages(), images);
 
         productInfoImageService.create(imageDtos, productInfo);
+
+        auditService.logAction(
+                this.getClass().getName() + "." + new Object(){}.getClass().getEnclosingMethod().getName(),
+                productInfo.getClass().getName(),
+                productInfo.getId(),
+                "Updated product info for product with ID: " + productEntity.getId()
+        );
     }
 
     @Override

@@ -17,6 +17,7 @@ import ru.bakht.internetshop.auth.model.dto.UserDto;
 import ru.bakht.internetshop.auth.model.dto.UserInfoDto;
 import ru.bakht.internetshop.auth.repository.UserRepo;
 import ru.bakht.internetshop.auth.service.UserService;
+import ru.bakht.internetshop.service.AuditService;
 import ru.bakht.internetshop.specification.UserInfoSpecification;
 import ru.bakht.internetshop.auth.util.AuthUtils;
 
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final UserInfoMapper userInfoMapper;
     private final AuthUtils authUtils;
     private final UserMapper userMapper;
+    private final AuditService auditService;
 
     @Override
     public Page<UserDto> getAll(UserDto filter, int page, int size, String sortField, String sortDirection) {
@@ -40,6 +42,13 @@ public class UserServiceImpl implements UserService {
         Specification<User> specification = createSpecificationWithFilter(filter);
 
         Page<User> users = userRepository.findAll(specification, pageable);
+
+        auditService.logAction(
+                this.getClass().getName() + "." + new Object(){}.getClass().getEnclosingMethod().getName(),
+                User.class.getName(),
+                null,
+                "Received all users"
+        );
 
         return users.map(userMapper::toDto);
     }
