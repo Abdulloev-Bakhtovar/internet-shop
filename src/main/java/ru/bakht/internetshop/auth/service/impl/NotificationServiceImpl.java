@@ -37,10 +37,10 @@ public class NotificationServiceImpl implements NotificationService {
         try {
             emailService.sendEmail(
                     messageRecipient,
-                    templateType,
+                    EmailTemplateName.ORDER_NOTIFICATION,
                     confirmToken,
-                    subject
-            );
+                    subject,
+                    null);
         } catch (MessagingException e) {
             throw new AppException(
                     "Failed to send email to address: " + messageRecipient, HttpStatus.INTERNAL_SERVER_ERROR
