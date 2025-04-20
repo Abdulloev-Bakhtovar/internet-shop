@@ -7,5 +7,5 @@ import ru.bakht.internetshop.model.Type;
 import java.util.UUID;
 
 @Repository
-public interface TypeRepository extends JpaRepository<Type, UUID> {
+public interface TypeRepo extends JpaRepository<Type, UUID> {
 }
