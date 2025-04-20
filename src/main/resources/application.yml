@@ -87,6 +87,9 @@ application:
     frontend:
       confirm-url: ${FRONTEND_CONFIRM_URL}
 
+  image:
+    path: ${IMAGE_PATH}
+
 google:
   recaptcha:
     secret-key: ${GOOGLE_RECAPTCHA_SECRET_KEY}
