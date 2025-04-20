@@ -6,5 +6,6 @@ public enum EmailTemplateName {
     CHANGE_EMAIL,
     RESET_PASSWORD,
     CHANGE_PASSWORD,
-    TWO_FACTOR;
+    TWO_FACTOR,
+    ORDER_NOTIFICATION;
 }
